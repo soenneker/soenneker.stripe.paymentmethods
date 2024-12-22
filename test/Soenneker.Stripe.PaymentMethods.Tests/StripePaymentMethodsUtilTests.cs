@@ -2,7 +2,6 @@ using Soenneker.Stripe.PaymentMethods.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
 
-
 namespace Soenneker.Stripe.PaymentMethods.Tests;
 
 [Collection("Collection")]
@@ -12,6 +11,12 @@ public class StripePaymentMethodsUtilTests : FixturedUnitTest
 
     public StripePaymentMethodsUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
-        _util = Resolve<IStripePaymentMethodsUtil>();
+        _util = Resolve<IStripePaymentMethodsUtil>(true);
+    }
+
+    [Fact]
+    public void Default()
+    {
+
     }
 }
