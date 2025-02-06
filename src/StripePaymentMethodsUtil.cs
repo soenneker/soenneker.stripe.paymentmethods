@@ -23,8 +23,7 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         {
             StripeClient client = await stripeUtil.Get(cancellationToken).NoSync();
 
-            var service = new PaymentMethodService(client);
-            return service;
+            return new PaymentMethodService(client);
         });
     }
 
@@ -35,9 +34,7 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         if (response == null)
             return null;
 
-        List<PaymentMethod> result = await response.ToListAsync(cancellationToken).NoSync();
-
-        return result;
+        return await response.ToListAsync(cancellationToken).NoSync();
     }
 
     public async ValueTask<List<PaymentMethod>?> GetAllByUserId(string userId, CancellationToken cancellationToken = default)
@@ -53,16 +50,12 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         if (response == null)
             return null;
 
-        List<PaymentMethod> result = await response.ToListAsync(cancellationToken).NoSync();
-
-        return result;
+        return await response.ToListAsync(cancellationToken).NoSync();
     }
 
     public async ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default)
     {
-        PaymentMethod response = await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
-
-        return response;
+        return await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
     }
 
     public void Dispose()

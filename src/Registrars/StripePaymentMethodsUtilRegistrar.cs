@@ -13,18 +13,22 @@ public static class StripePaymentMethodsUtilRegistrar
     /// <summary>
     /// Adds <see cref="IStripePaymentMethodsUtil"/> as a singleton service. <para/>
     /// </summary>
-    public static void AddStripePaymentMethodsUtilAsSingleton(this IServiceCollection services)
+    public static IServiceCollection AddStripePaymentMethodsUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddStripeClientUtilAsSingleton();
-        services.TryAddSingleton<IStripePaymentMethodsUtil, StripePaymentMethodsUtil>();
+        services.AddStripeClientUtilAsSingleton()
+                .TryAddSingleton<IStripePaymentMethodsUtil, StripePaymentMethodsUtil>();
+
+        return services;
     }
 
     /// <summary>
     /// Adds <see cref="IStripePaymentMethodsUtil"/> as a scoped service. <para/>
     /// </summary>
-    public static void AddStripePaymentMethodsUtilAsScoped(this IServiceCollection services)
+    public static IServiceCollection AddStripePaymentMethodsUtilAsScoped(this IServiceCollection services)
     {
-        services.AddStripeClientUtilAsSingleton();
-        services.TryAddScoped<IStripePaymentMethodsUtil, StripePaymentMethodsUtil>();
+        services.AddStripeClientUtilAsSingleton()
+                .TryAddScoped<IStripePaymentMethodsUtil, StripePaymentMethodsUtil>();
+
+        return services;
     }
 }
