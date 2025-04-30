@@ -37,4 +37,6 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or null if no payment method is found with the specified ID.</returns>
     [Pure]
     ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default);
+
+    ValueTask Delete(string paymentMethodId, CancellationToken cancellationToken = default);
 }

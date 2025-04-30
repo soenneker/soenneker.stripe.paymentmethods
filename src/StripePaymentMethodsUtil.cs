@@ -58,6 +58,11 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         return await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
     }
 
+    public async ValueTask Delete(string paymentMethodId, CancellationToken cancellationToken = default)
+    {
+        await (await _service.Get(cancellationToken).NoSync()).DetachAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
+    }
+
     public void Dispose()
     {
         GC.SuppressFinalize(this);
