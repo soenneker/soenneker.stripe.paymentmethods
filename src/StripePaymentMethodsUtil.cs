@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Soenneker.Extensions.Task;
 using Soenneker.Extensions.ValueTask;
 using Soenneker.Stripe.Client.Abstract;
+using Soenneker.Stripe.Enums.PaymentMethodTypes;
 using Soenneker.Stripe.PaymentMethods.Abstract;
 using Soenneker.Utils.AsyncSingleton;
 using Stripe;
@@ -37,20 +38,59 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         return await response.ToListAsync(cancellationToken).NoSync();
     }
 
-    public async ValueTask<List<PaymentMethod>?> GetAllByUserId(string userId, CancellationToken cancellationToken = default)
+    public async ValueTask<List<PaymentMethod>?> GetAllByUserIdAndType(string userId, StripePaymentMethodType type,
+        CancellationToken cancellationToken = default)
     {
         var options = new PaymentMethodListOptions
         {
-            Type = "card",
+            Type = type.Value,
             Customer = userId
         };
 
-        IAsyncEnumerable<PaymentMethod>? response = (await _service.Get(cancellationToken).NoSync()).ListAutoPagingAsync(options: options, cancellationToken: cancellationToken);
+        IAsyncEnumerable<PaymentMethod>? response =
+            (await _service.Get(cancellationToken).NoSync()).ListAutoPagingAsync(options: options, cancellationToken: cancellationToken);
 
         if (response == null)
             return null;
 
         return await response.ToListAsync(cancellationToken).NoSync();
+    }
+
+    public async ValueTask<List<PaymentMethod>> GetAllByUserIdAndTypes(string userId, List<StripePaymentMethodType> types, CancellationToken cancellationToken = default)
+    {
+        var all = new List<PaymentMethod>();
+        PaymentMethodService service = await _service.Get(cancellationToken).NoSync();
+
+        foreach (StripePaymentMethodType type in types)
+        {
+            var options = new PaymentMethodListOptions
+            {
+                Type = type.Value,
+                Customer = userId
+            };
+
+            List<PaymentMethod>? methods = await service.ListAutoPagingAsync(options, cancellationToken: cancellationToken).ToListAsync(cancellationToken).NoSync();
+
+            if (methods != null)
+                all.AddRange(methods);
+        }
+
+        return all;
+    }
+
+    public async ValueTask<PaymentMethod?> GetFirstByUserIdAndType(string userId, StripePaymentMethodType type, CancellationToken cancellationToken = default)
+    {
+        var options = new PaymentMethodListOptions
+        {
+            Type = type.Value,
+            Customer = userId,
+            Limit = 1
+        };
+
+        PaymentMethodService service = await _service.Get(cancellationToken).NoSync();
+        StripeList<PaymentMethod>? list = await service.ListAsync(options, cancellationToken: cancellationToken).NoSync();
+
+        return list?.Data?.FirstOrDefault();
     }
 
     public async ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default)
