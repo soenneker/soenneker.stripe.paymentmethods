@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Stripe.PaymentMethods
+﻿# Contributing to Soenneker.Stripe.PaymentMethods
 
 We're excited that you're interested in contributing!
 
