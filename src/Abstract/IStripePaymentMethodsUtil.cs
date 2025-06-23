@@ -61,7 +61,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
     [Pure]
-    ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
@@ -74,7 +74,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <param name="options"></param>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
-    ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions options, RequestOptions? requestOptions, CancellationToken cancellationToken = default);
+    ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     ValueTask Attach(string paymentMethodId, PaymentMethodAttachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 }
