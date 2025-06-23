@@ -61,7 +61,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
     [Pure]
-    ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default);
+    ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
@@ -70,7 +70,11 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// Detaches (removes) a payment method from a Stripe customer. This does not delete the payment method from Stripe entirely.
     /// </summary>
     /// <param name="paymentMethodId">The Stripe ID of the payment method to detach.</param>
+    /// <param name="requestOptions"></param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <param name="options"></param>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
-    ValueTask Delete(string paymentMethodId, CancellationToken cancellationToken = default);
+    ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions options, RequestOptions? requestOptions, CancellationToken cancellationToken = default);
+
+    ValueTask Attach(string paymentMethodId, PaymentMethodAttachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -111,14 +110,19 @@ public sealed class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         return await service.UpdateAsync(paymentMethodId, options, requestOptions, cancellationToken).NoSync();
     }
 
-    public async ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default)
+    public async ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        return await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
+        return await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, options, requestOptions, cancellationToken: cancellationToken).NoSync();
     }
 
-    public async ValueTask Delete(string paymentMethodId, CancellationToken cancellationToken = default)
+    public async ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        await (await _service.Get(cancellationToken).NoSync()).DetachAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
+        await (await _service.Get(cancellationToken).NoSync()).DetachAsync(paymentMethodId, options, requestOptions, cancellationToken: cancellationToken).NoSync();
+    }
+
+    public async ValueTask Attach(string paymentMethodId, PaymentMethodAttachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
+    {
+        await (await _service.Get(cancellationToken).NoSync()).AttachAsync(paymentMethodId, options, requestOptions, cancellationToken: cancellationToken).NoSync();
     }
 
     public void Dispose()
