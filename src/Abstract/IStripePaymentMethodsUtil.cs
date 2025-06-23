@@ -13,6 +13,9 @@ namespace Soenneker.Stripe.PaymentMethods.Abstract;
 /// </summary>
 public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
 {
+    ValueTask<PaymentMethod> Create(PaymentMethodCreateOptions options, RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieves all available payment methods in the connected Stripe account. This is not scoped to a specific customer.
     /// </summary>
@@ -59,6 +62,9 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
     [Pure]
     ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default);
+
+    ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Detaches (removes) a payment method from a Stripe customer. This does not delete the payment method from Stripe entirely.

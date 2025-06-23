@@ -14,7 +14,7 @@ using Stripe;
 namespace Soenneker.Stripe.PaymentMethods;
 
 ///<inheritdoc cref="IStripePaymentMethodsUtil"/>
-public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
+public sealed class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
 {
     private readonly AsyncSingleton<PaymentMethodService> _service;
 
@@ -26,6 +26,14 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
 
             return new PaymentMethodService(client);
         });
+    }
+
+    public async ValueTask<PaymentMethod> Create(PaymentMethodCreateOptions options, RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        PaymentMethodService service = await _service.Get(cancellationToken).NoSync();
+
+        return await service.CreateAsync(options, requestOptions, cancellationToken).NoSync();
     }
 
     public async ValueTask<List<PaymentMethod>?> GetAll(CancellationToken cancellationToken = default)
@@ -56,7 +64,8 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         return await response.ToListAsync(cancellationToken).NoSync();
     }
 
-    public async ValueTask<List<PaymentMethod>> GetAllByUserIdAndTypes(string userId, List<StripePaymentMethodType> types, CancellationToken cancellationToken = default)
+    public async ValueTask<List<PaymentMethod>> GetAllByUserIdAndTypes(string userId, List<StripePaymentMethodType> types,
+        CancellationToken cancellationToken = default)
     {
         var all = new List<PaymentMethod>();
         PaymentMethodService service = await _service.Get(cancellationToken).NoSync();
@@ -69,7 +78,8 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
                 Customer = userId
             };
 
-            List<PaymentMethod>? methods = await service.ListAutoPagingAsync(options, cancellationToken: cancellationToken).ToListAsync(cancellationToken).NoSync();
+            List<PaymentMethod>? methods =
+                await service.ListAutoPagingAsync(options, cancellationToken: cancellationToken).ToListAsync(cancellationToken).NoSync();
 
             if (methods != null)
                 all.AddRange(methods);
@@ -93,6 +103,14 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
         return list?.Data?.FirstOrDefault();
     }
 
+    public async ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        PaymentMethodService service = await _service.Get(cancellationToken).NoSync();
+
+        return await service.UpdateAsync(paymentMethodId, options, requestOptions, cancellationToken).NoSync();
+    }
+
     public async ValueTask<PaymentMethod?> Get(string paymentMethodId, CancellationToken cancellationToken = default)
     {
         return await (await _service.Get(cancellationToken).NoSync()).GetAsync(paymentMethodId, cancellationToken: cancellationToken).NoSync();
@@ -105,15 +123,11 @@ public class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         _service.Dispose();
     }
 
     public ValueTask DisposeAsync()
     {
-        GC.SuppressFinalize(this);
-
         return _service.DisposeAsync();
     }
 }
