@@ -43,7 +43,7 @@
     
     <ItemGroup>
       <PackageReference Include="Soenneker.Stripe.Client" Version="3.0.1091" />
-      <PackageReference Include="Soenneker.Stripe.Enums.PaymentMethodTypes" Version="3.0.10" />
+      <PackageReference Include="Soenneker.Stripe.Enums.PaymentMethodTypes" Version="3.0.11" />
       <PackageReference Include="System.Linq.Async" Version="6.0.3" />
     </ItemGroup>
 
