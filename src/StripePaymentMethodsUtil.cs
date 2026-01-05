@@ -16,16 +16,20 @@ namespace Soenneker.Stripe.PaymentMethods;
 public sealed class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
 {
     private readonly AsyncSingleton<PaymentMethodService> _service;
+    private readonly IStripeClientUtil _stripeUtil;
 
     public StripePaymentMethodsUtil(IStripeClientUtil stripeUtil)
     {
-        _service = new AsyncSingleton<PaymentMethodService>(async cancellationToken =>
-        {
-            StripeClient client = await stripeUtil.Get(cancellationToken)
-                                                  .NoSync();
+        _stripeUtil = stripeUtil;
+        _service = new AsyncSingleton<PaymentMethodService>(CreateService);
+    }
 
-            return new PaymentMethodService(client);
-        });
+    private async ValueTask<PaymentMethodService> CreateService(CancellationToken cancellationToken)
+    {
+        StripeClient client = await _stripeUtil.Get(cancellationToken)
+                                               .NoSync();
+
+        return new PaymentMethodService(client);
     }
 
     public async ValueTask<PaymentMethod> Create(PaymentMethodCreateOptions options, RequestOptions? requestOptions = null,
