@@ -13,6 +13,13 @@ namespace Soenneker.Stripe.PaymentMethods.Abstract;
 /// </summary>
 public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
 {
+    /// <summary>
+    /// Executes the create operation.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    /// <param name="requestOptions">The request options.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     ValueTask<PaymentMethod> Create(PaymentMethodCreateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
@@ -63,6 +70,14 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     [Pure]
     ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Executes the update operation.
+    /// </summary>
+    /// <param name="paymentMethodId">The payment method id.</param>
+    /// <param name="options">The options.</param>
+    /// <param name="requestOptions">The request options.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
@@ -76,5 +91,13 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
     ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Executes the attach operation.
+    /// </summary>
+    /// <param name="paymentMethodId">The payment method id.</param>
+    /// <param name="options">The options.</param>
+    /// <param name="requestOptions">The request options.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask Attach(string paymentMethodId, PaymentMethodAttachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 }
