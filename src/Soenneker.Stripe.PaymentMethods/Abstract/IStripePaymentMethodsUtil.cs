@@ -2,17 +2,26 @@ using Soenneker.Stripe.Enums.PaymentMethodTypes;
 using Stripe;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Soenneker.Stripe.PaymentMethods.Abstract;
 
 /// <summary>
-/// A .NET typesafe implementation of Stripe's Payment Methods API, providing access to create, retrieve, and delete customer payment methods.
+/// Creates, retrieves, updates, attaches, detaches, and lists Stripe payment methods.
 /// </summary>
 public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
 {
+    /// <summary>
+    /// Releases the lazily initialized payment-method service owned by this utility.
+    /// </summary>
+    new void Dispose();
+
+    /// <summary>
+    /// Asynchronously releases the lazily initialized payment-method service owned by this utility.
+    /// </summary>
+    new ValueTask DisposeAsync();
+
     /// <summary>
     /// Executes the create operation.
     /// </summary>
@@ -28,7 +37,6 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// </summary>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing a list of <see cref="PaymentMethod"/> objects, or <c>null</c> if none are found.</returns>
-    [Pure]
     ValueTask<List<PaymentMethod>?> GetAll(CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -38,7 +46,6 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="type">The Stripe payment method type to filter by (e.g., <c>card</c>).</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing a list of <see cref="PaymentMethod"/> objects for the customer, or <c>null</c> if none are found.</returns>
-    [Pure]
     ValueTask<List<PaymentMethod>?> GetAllByUserIdAndType(string userId, StripePaymentMethodType type, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -48,7 +55,6 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="types">A list of Stripe payment method types to retrieve.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing a combined list of <see cref="PaymentMethod"/> objects across all requested types.</returns>
-    [Pure]
     ValueTask<List<PaymentMethod>> GetAllByUserIdAndTypes(string userId, List<StripePaymentMethodType> types, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -58,16 +64,16 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="type">The type of payment method to retrieve (e.g., <c>card</c>).</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the first <see cref="PaymentMethod"/> found, or <c>null</c> if none exist.</returns>
-    [Pure]
     ValueTask<PaymentMethod?> GetFirstByUserIdAndType(string userId, StripePaymentMethodType type, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a specific payment method by its Stripe payment method ID.
     /// </summary>
     /// <param name="paymentMethodId">The Stripe ID of the payment method to retrieve.</param>
+    /// <param name="options">Optional retrieval options.</param>
+    /// <param name="requestOptions">Optional request-level Stripe settings.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
-    [Pure]
     ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>

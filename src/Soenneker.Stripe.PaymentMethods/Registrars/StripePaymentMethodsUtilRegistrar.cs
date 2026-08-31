@@ -6,7 +6,7 @@ using Soenneker.Stripe.PaymentMethods.Abstract;
 namespace Soenneker.Stripe.PaymentMethods.Registrars;
 
 /// <summary>
-/// A .NET typesafe implementation of Stripe's Payment Methods API
+/// Registers Stripe payment-method operations.
 /// </summary>
 public static class StripePaymentMethodsUtilRegistrar
 {
