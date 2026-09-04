@@ -12,6 +12,7 @@ using Stripe;
 
 namespace Soenneker.Stripe.PaymentMethods;
 
+/// <inheritdoc cref="IStripePaymentMethodsUtil" />
 public sealed class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
 {
     private readonly AsyncSingleton<PaymentMethodService> _service;
