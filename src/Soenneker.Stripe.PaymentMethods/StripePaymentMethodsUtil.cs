@@ -88,12 +88,12 @@ public sealed class StripePaymentMethodsUtil : IStripePaymentMethodsUtil
                 Customer = userId
             };
 
-            List<PaymentMethod>? methods = await service.ListAutoPagingAsync(options, cancellationToken: cancellationToken)
-                                                        .ToListAsync(cancellationToken)
-                                                        .NoSync();
-
-            if (methods != null)
-                all.AddRange(methods);
+            await foreach (PaymentMethod method in service.ListAutoPagingAsync(options, cancellationToken: cancellationToken)
+                                                         .WithCancellation(cancellationToken)
+                                                         .ConfigureAwait(false))
+            {
+                all.Add(method);
+            }
         }
 
         return all;
