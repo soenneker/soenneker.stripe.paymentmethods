@@ -1,5 +1,6 @@
 using Soenneker.Stripe.Enums.PaymentMethodTypes;
-using Stripe;
+using Soenneker.Stripe.OpenApiClient.Models;
+using Soenneker.Stripe.Client;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,7 +30,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="requestOptions">The request options.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task containing the result of the operation.</returns>
-    ValueTask<PaymentMethod> Create(PaymentMethodCreateOptions options, RequestOptions? requestOptions = null,
+    ValueTask<PaymentMethod> Create(PostPaymentMethodsXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -74,7 +75,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="requestOptions">Optional request-level Stripe settings.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
-    ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodGetOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask<PaymentMethod?> Get(string paymentMethodId, GetPaymentMethodsPaymentMethodXWwwFormUrlencodedRequest? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Executes the update operation.
@@ -84,7 +85,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="requestOptions">The request options.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task containing the result of the operation.</returns>
-    ValueTask<PaymentMethod> Update(string paymentMethodId, PaymentMethodUpdateOptions options, RequestOptions? requestOptions = null,
+    ValueTask<PaymentMethod> Update(string paymentMethodId, PostPaymentMethodsPaymentMethodXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -95,7 +96,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <param name="options"></param>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
-    ValueTask Delete(string paymentMethodId, PaymentMethodDetachOptions? options = null, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask Delete(string paymentMethodId, PostPaymentMethodsPaymentMethodDetachXWwwFormUrlencodedRequest? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Executes the attach operation.
@@ -105,5 +106,5 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="requestOptions">The request options.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    ValueTask Attach(string paymentMethodId, PaymentMethodAttachOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask Attach(string paymentMethodId, PostPaymentMethodsPaymentMethodAttachXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 }
