@@ -1,3 +1,4 @@
+using PaymentMethodQuery = Soenneker.Stripe.OpenApiClient.V1.Payment_methods.Item.WithPaymentMethodItemRequestBuilder.WithPaymentMethodItemRequestBuilderGetQueryParameters;
 using Soenneker.Stripe.Enums.PaymentMethodTypes;
 using Soenneker.Stripe.OpenApiClient.Models;
 using Soenneker.Stripe.Client;
@@ -75,7 +76,7 @@ public interface IStripePaymentMethodsUtil : IAsyncDisposable, IDisposable
     /// <param name="requestOptions">Optional request-level Stripe settings.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> containing the <see cref="PaymentMethod"/> if found, or <c>null</c> otherwise.</returns>
-    ValueTask<PaymentMethod?> Get(string paymentMethodId, GetPaymentMethodsPaymentMethodXWwwFormUrlencodedRequest? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodQuery? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Executes the update operation.

@@ -1,3 +1,4 @@
+using PaymentMethodQuery = Soenneker.Stripe.OpenApiClient.V1.Payment_methods.Item.WithPaymentMethodItemRequestBuilder.WithPaymentMethodItemRequestBuilderGetQueryParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +35,10 @@ public sealed class StripePaymentMethodsUtil(IStripeClientUtil client) : IStripe
         var api = await client.Get(cancellationToken);
         await api.V1.Payment_methods[paymentMethodId].Detach.PostAsync(options ?? new(), c => requestOptions?.Apply(c.Headers), cancellationToken);
     }
-    public async ValueTask<PaymentMethod?> Get(string paymentMethodId, GetPaymentMethodsPaymentMethodXWwwFormUrlencodedRequest? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
+    public async ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodQuery? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
         var api = await client.Get(cancellationToken);
-        return await api.V1.Payment_methods[paymentMethodId].GetAsync(options ?? new(), c => requestOptions?.Apply(c.Headers), cancellationToken);
+        return await api.V1.Payment_methods[paymentMethodId].GetAsync(new(), c => { c.QueryParameters = options ?? new(); requestOptions?.Apply(c.Headers); }, cancellationToken);
     }
     private async ValueTask<List<PaymentMethod>> List(string? customer, StripePaymentMethodType? type, CancellationToken cancellationToken)
     {
