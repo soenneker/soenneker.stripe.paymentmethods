@@ -38,7 +38,7 @@ public sealed class StripePaymentMethodsUtil(IStripeClientUtil client) : IStripe
     public async ValueTask<PaymentMethod?> Get(string paymentMethodId, PaymentMethodQuery? options = null, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
         var api = await client.Get(cancellationToken);
-        return await api.V1.Payment_methods[paymentMethodId].GetAsync(new(), c => { c.QueryParameters = options ?? new(); requestOptions?.Apply(c.Headers); }, cancellationToken);
+        return await api.V1.Payment_methods[paymentMethodId].GetAsync(c => { c.QueryParameters = options ?? new(); requestOptions?.Apply(c.Headers); }, cancellationToken);
     }
     private async ValueTask<List<PaymentMethod>> List(string? customer, StripePaymentMethodType? type, CancellationToken cancellationToken)
     {
@@ -47,7 +47,7 @@ public sealed class StripePaymentMethodsUtil(IStripeClientUtil client) : IStripe
         string? cursor = null;
         do
         {
-            var page = await api.V1.Payment_methods.GetAsync(new(), c =>
+            var page = await api.V1.Payment_methods.GetAsync(c =>
             {
                 c.QueryParameters.Customer = customer;
                 c.QueryParameters.Type = type == null ? null : Microsoft.Kiota.Abstractions.Helpers.EnumHelpers.GetEnumValue<GetPaymentMethodsTypeParameter>(type.Value);
